@@ -1,0 +1,71 @@
+generator client {
+    provider = "prisma-client-js"
+}
+
+datasource db {
+    provider = "sqlite"
+    url      = env("DATABASE_URL")
+}
+
+model Movie {
+  id        String   @id @default(cuid())
+  title     String
+  tmdbId    Int?
+  addedBy   String?
+  posterUrl String?
+  overview  String?
+  genres    String   @default("")
+  mediaType String   @default("movie")
+  createdAt DateTime @default(now())
+  streamingProviders String @default("")
+
+  profile    Profile?          @relation(fields: [addedBy], references: [id])
+  userStates MovieUserState[]
+
+  @@index([addedBy])
+  @@index([mediaType])
+  @@index([createdAt])
+}
+
+model Profile {
+  id         String    @id @default(cuid())
+  username   String    @unique
+  imageUrl   String?
+  createdAt  DateTime  @default(now())
+  updatedAt  DateTime  @updatedAt
+  lastSeenAt DateTime?
+
+  movies          Movie[]
+  movieUserStates MovieUserState[]
+  messages        Message[]
+}
+
+model Message {
+  id        String   @id @default(cuid())
+  profileId String
+  content   String
+  createdAt DateTime @default(now())
+
+  profile   Profile  @relation(fields: [profileId], references: [id], onDelete: Cascade)
+
+  @@index([createdAt])
+  @@index([profileId])
+}
+
+model MovieUserState {
+  id        String    @id @default(cuid())
+  movieId   String
+  profileId String
+  seen      Boolean   @default(false)
+  rating    Int?
+  note      String?
+  seenAt    DateTime?
+  updatedAt DateTime  @updatedAt
+
+  movie   Movie   @relation(fields: [movieId], references: [id], onDelete: Cascade)
+  profile Profile @relation(fields: [profileId], references: [id], onDelete: Cascade)
+
+  @@unique([movieId, profileId])
+  @@index([movieId])
+  @@index([profileId])
+}

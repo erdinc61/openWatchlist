@@ -1,0 +1,201 @@
+@import "tailwindcss";
+
+@theme {
+  --font-sans: var(--font-jakarta), ui-sans-serif, system-ui, sans-serif;
+  --font-bebas: var(--font-bebas), sans-serif;
+  --font-jakarta: var(--font-jakarta), sans-serif;
+
+  /* Noir Cinema Palette */
+  --color-void: #040407;
+  --color-surface: #0a0a12;
+  --color-card: #0e0e18;
+  --color-border: rgba(255,255,255,0.07);
+  --color-neon: #FF0055;
+  --color-neon-dim: rgba(255, 0, 85, 0.15);
+  --color-amber: #FFB300;
+  --color-ice: #00D4FF;
+  --color-emerald: #00E57A;
+}
+
+/* ─── FILM GRAIN ─────────────────────────────────── */
+body::after {
+  content: '';
+  position: fixed;
+  inset: 0;
+  pointer-events: none;
+  z-index: 9999;
+  opacity: 0.032;
+  background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 512 512' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.85' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E");
+  background-size: 180px 180px;
+  animation: grainShift 0.8s steps(1) infinite;
+}
+
+@keyframes grainShift {
+  0%   { background-position: 0 0; }
+  10%  { background-position: -5% -10%; }
+  20%  { background-position: -15% 5%; }
+  30%  { background-position: 7% -25%; }
+  40%  { background-position: -5% 25%; }
+  50%  { background-position: -15% 10%; }
+  60%  { background-position: 15% 0%; }
+  70%  { background-position: 0% 15%; }
+  80%  { background-position: 3% 35%; }
+  90%  { background-position: -10% 10%; }
+  100% { background-position: 0 0; }
+}
+
+/* ─── TYPOGRAPHY ─────────────────────────────────── */
+.font-bebas { font-family: var(--font-bebas); }
+.font-jakarta { font-family: var(--font-jakarta); }
+
+/* ─── SCROLLBAR ──────────────────────────────────── */
+::-webkit-scrollbar { width: 4px; height: 4px; }
+::-webkit-scrollbar-track { background: transparent; }
+::-webkit-scrollbar-thumb {
+  background: rgba(255, 0, 85, 0.3);
+  border-radius: 9999px;
+}
+::-webkit-scrollbar-thumb:hover { background: rgba(255, 0, 85, 0.6); }
+
+/* ─── SELECTION ──────────────────────────────────── */
+::selection { background: rgba(255, 0, 85, 0.25); color: white; }
+
+/* ─── NEON GLOW UTILITIES ────────────────────────── */
+.neon-glow {
+  box-shadow:
+    0 0 10px rgba(255, 0, 85, 0.4),
+    0 0 30px rgba(255, 0, 85, 0.15),
+    0 0 60px rgba(255, 0, 85, 0.06);
+}
+
+.neon-glow-sm {
+  box-shadow: 0 0 8px rgba(255, 0, 85, 0.5), 0 0 20px rgba(255, 0, 85, 0.2);
+}
+
+.amber-glow {
+  box-shadow: 0 0 10px rgba(255, 179, 0, 0.4), 0 0 30px rgba(255, 179, 0, 0.15);
+}
+
+/* ─── CARD GRADIENT BORDER ───────────────────────── */
+.card-border {
+  position: relative;
+}
+.card-border::before {
+  content: '';
+  position: absolute;
+  inset: 0;
+  border-radius: inherit;
+  padding: 1px;
+  background: linear-gradient(135deg, rgba(255,0,85,0.3) 0%, rgba(255,255,255,0.05) 50%, rgba(255,179,0,0.15) 100%);
+  -webkit-mask: linear-gradient(#fff 0 0) content-box, linear-gradient(#fff 0 0);
+  mask: linear-gradient(#fff 0 0) content-box, linear-gradient(#fff 0 0);
+  -webkit-mask-composite: xor;
+  mask-composite: exclude;
+  pointer-events: none;
+}
+
+/* ─── ANIMATIONS ─────────────────────────────────── */
+@keyframes fadeUp {
+  from { opacity: 0; transform: translateY(16px); }
+  to   { opacity: 1; transform: translateY(0); }
+}
+@keyframes fadeIn {
+  from { opacity: 0; }
+  to   { opacity: 1; }
+}
+@keyframes scaleIn {
+  from { opacity: 0; transform: scale(0.92); }
+  to   { opacity: 1; transform: scale(1); }
+}
+@keyframes spotlightPulse {
+  0%, 100% { opacity: 0.6; transform: scale(1); }
+  50%       { opacity: 1;   transform: scale(1.05); }
+}
+@keyframes float {
+  0%, 100% { transform: translateY(0px); }
+  50%       { transform: translateY(-6px); }
+}
+@keyframes scanline {
+  0%   { transform: translateY(-100%); }
+  100% { transform: translateY(100vh); }
+}
+@keyframes neonFlicker {
+  0%, 19%, 21%, 23%, 25%, 54%, 56%, 100% { opacity: 1; }
+  20%, 24%, 55% { opacity: 0.6; }
+}
+@keyframes shimmerSlide {
+  0%   { transform: translateX(-100%) skewX(-15deg); }
+  100% { transform: translateX(200%) skewX(-15deg); }
+}
+
+.anim-fade-up   { animation: fadeUp 0.45s cubic-bezier(0.22,1,0.36,1) forwards; }
+.anim-scale-in  { animation: scaleIn 0.35s cubic-bezier(0.22,1,0.36,1) forwards; }
+.anim-float     { animation: float 3.5s ease-in-out infinite; }
+.anim-flicker   { animation: neonFlicker 3s linear infinite; }
+
+/* Staggered children */
+.stagger > *:nth-child(1) { animation-delay: 0ms; }
+.stagger > *:nth-child(2) { animation-delay: 60ms; }
+.stagger > *:nth-child(3) { animation-delay: 120ms; }
+.stagger > *:nth-child(4) { animation-delay: 180ms; }
+.stagger > *:nth-child(5) { animation-delay: 240ms; }
+.stagger > *:nth-child(6) { animation-delay: 300ms; }
+
+/* ─── POSTER CARD HOVER ──────────────────────────── */
+.poster-card {
+  transition: transform 0.3s cubic-bezier(0.22,1,0.36,1), box-shadow 0.3s ease;
+}
+.poster-card:hover {
+  transform: scale(1.06) translateY(-4px);
+  box-shadow:
+    0 20px 40px rgba(0,0,0,0.7),
+    0 0 0 1px rgba(255,0,85,0.4),
+    0 0 20px rgba(255,0,85,0.12);
+  z-index: 10;
+}
+
+/* ─── SCANLINE OVERLAY (subtle) ──────────────────── */
+.scanlines::before {
+  content: '';
+  position: absolute;
+  inset: 0;
+  background: repeating-linear-gradient(
+    0deg,
+    transparent,
+    transparent 2px,
+    rgba(0,0,0,0.03) 2px,
+    rgba(0,0,0,0.03) 4px
+  );
+  pointer-events: none;
+  z-index: 1;
+}
+
+/* ─── SHIMMER BUTTON ─────────────────────────────── */
+.btn-shimmer {
+  overflow: hidden;
+}
+.btn-shimmer::after {
+  content: '';
+  position: absolute;
+  top: 0; left: 0;
+  width: 35%;
+  height: 100%;
+  background: linear-gradient(90deg, transparent, rgba(255,255,255,0.18), transparent);
+  animation: shimmerSlide 3s ease-in-out infinite;
+}
+
+/* ─── INPUT FOCUS ────────────────────────────────── */
+.input-neon:focus {
+  outline: none;
+  border-color: rgba(255, 0, 85, 0.5);
+  box-shadow: 0 0 0 1px rgba(255,0,85,0.2), 0 0 20px rgba(255,0,85,0.08);
+}
+
+/* ─── GRADIENT MESH BG ───────────────────────────── */
+.mesh-bg {
+  background:
+    radial-gradient(ellipse 80% 50% at 20% -10%, rgba(255,0,85,0.08) 0%, transparent 60%),
+    radial-gradient(ellipse 60% 40% at 80% 110%, rgba(255,179,0,0.05) 0%, transparent 60%),
+    radial-gradient(ellipse 50% 60% at 50% 50%, rgba(0,212,255,0.03) 0%, transparent 70%),
+    #040407;
+}

@@ -1,0 +1,7 @@
+POST http://localhost:3000/api/movies
+Content-Type: application/json
+
+{
+  "tmdbId": 27205,
+  "addedBy": "erdinc"
+}
